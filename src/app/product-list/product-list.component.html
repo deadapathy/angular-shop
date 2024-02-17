@@ -1,15 +1,12 @@
-<h2>Products</h2>
+<h2>Парфюмы</h2>
 
 <div class="productList">
-  <div *ngFor="let product of products">
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <p>Цена: {{ product.price }}</p>
+  <div *ngFor="let product of products" class="product">
+    <img width="128" height="128" [src]="product.link" alt="Product Image" />
+    <div>
+      <h3>{{ product.name }}</h3>
+      <h4>Цена: {{ product.price.toLocaleString() }}</h4>
+    </div>
     <button>Купить</button>
   </div>
 </div>
-<!-- 
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at https://angular.io/license
--->

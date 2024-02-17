@@ -1,8 +1,7 @@
 /* Global Styles */
 @font-face {
   font-family: "Montserrat";
-  src: url("/src/assets/fonts/Montserrat-VariableFont_wght.ttf");
-  /* format('ttf'); */
+  src: url("../src/assets/fonts/Montserrat-VariableFont_wght.ttf");
   font-display: swap;
 }
 
@@ -41,12 +40,18 @@ h2 {
 }
 
 h1,
-h2 {
-  font-weight: lighter;
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* font-weight: lighter; */
+  margin: 0;
 }
 
 p {
   font-size: 14px;
+  margin: 0;
 }
 
 /* Hyperlink */

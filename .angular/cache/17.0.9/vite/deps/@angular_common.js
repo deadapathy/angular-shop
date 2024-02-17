@@ -15,7 +15,6 @@ import {
   HashLocationStrategy,
   I18nPluralPipe,
   I18nSelectPipe,
-  IMAGE_CONFIG,
   IMAGE_LOADER,
   JsonPipe,
   KeyValuePipe,
@@ -89,6 +88,7 @@ import {
   isPlatformServer,
   isPlatformWorkerApp,
   isPlatformWorkerUi,
+  normalizeQueryParams,
   parseCookieValue,
   provideCloudflareLoader,
   provideCloudinaryLoader,
@@ -96,9 +96,11 @@ import {
   provideImgixLoader,
   registerLocaleData,
   setRootDomAdapter
-} from "./chunk-72KHCS55.js";
-import "./chunk-RD5CTG73.js";
-import "./chunk-4WX7ZCK5.js";
+} from "./chunk-WWCMP3W4.js";
+import {
+  IMAGE_CONFIG
+} from "./chunk-QVLHSLBS.js";
+import "./chunk-A7YNPLSR.js";
 export {
   APP_BASE_HREF,
   AsyncPipe,
@@ -196,6 +198,7 @@ export {
   PLATFORM_WORKER_APP_ID as ɵPLATFORM_WORKER_APP_ID,
   PLATFORM_WORKER_UI_ID as ɵPLATFORM_WORKER_UI_ID,
   getDOM as ɵgetDOM,
+  normalizeQueryParams as ɵnormalizeQueryParams,
   parseCookieValue as ɵparseCookieValue,
   setRootDomAdapter as ɵsetRootDomAdapter
 };
