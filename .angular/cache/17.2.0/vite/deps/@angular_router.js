@@ -1,6 +1,6 @@
 import {
   Title
-} from "./chunk-XNLJHINR.js";
+} from "./chunk-SCR52NSQ.js";
 import {
   DOCUMENT,
   HashLocationStrategy,
@@ -9,7 +9,7 @@ import {
   LocationStrategy,
   PathLocationStrategy,
   ViewportScroller
-} from "./chunk-WWCMP3W4.js";
+} from "./chunk-VJCTHPFZ.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   APP_INITIALIZER,
@@ -37,6 +37,7 @@ import {
   InjectionToken,
   Injector,
   Input,
+  InputFlags,
   NgModule,
   NgModuleFactory$1,
   NgZone,
@@ -109,11 +110,11 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-QVLHSLBS.js";
+} from "./chunk-SLHZH7H3.js";
 import {
   __spreadProps,
   __spreadValues
-} from "./chunk-A7YNPLSR.js";
+} from "./chunk-IEMOZLTW.js";
 
 // node_modules/@angular/router/fesm2022/router.mjs
 var PRIMARY_OUTLET = "primary";
@@ -309,9 +310,7 @@ var UrlTree = class {
     }
   }
   get queryParamMap() {
-    if (!this._queryParamMap) {
-      this._queryParamMap = convertToParamMap(this.queryParams);
-    }
+    this._queryParamMap ??= convertToParamMap(this.queryParams);
     return this._queryParamMap;
   }
   /** @docsNotRequired */
@@ -345,9 +344,7 @@ var UrlSegment = class {
     this.parameters = parameters;
   }
   get parameterMap() {
-    if (!this._parameterMap) {
-      this._parameterMap = convertToParamMap(this.parameters);
-    }
+    this._parameterMap ??= convertToParamMap(this.parameters);
     return this._parameterMap;
   }
   /** @docsNotRequired */
@@ -463,13 +460,12 @@ function serializePath(path) {
   return `${encodeUriSegment(path.path)}${serializeMatrixParams(path.parameters)}`;
 }
 function serializeMatrixParams(params) {
-  return Object.keys(params).map((key) => `;${encodeUriSegment(key)}=${encodeUriSegment(params[key])}`).join("");
+  return Object.entries(params).map(([key, value]) => `;${encodeUriSegment(key)}=${encodeUriSegment(value)}`).join("");
 }
 function serializeQueryParams(params) {
-  const strParams = Object.keys(params).map((name) => {
-    const value = params[name];
+  const strParams = Object.entries(params).map(([name, value]) => {
     return Array.isArray(value) ? value.map((v) => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`).join("&") : `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
-  }).filter((s) => !!s);
+  }).filter((s) => s);
   return strParams.length ? `?${strParams.join("&")}` : "";
 }
 var SEGMENT_RE = /^[^\/()?;#]+/;
@@ -652,8 +648,7 @@ function createRoot(rootCandidate) {
 }
 function squashSegmentGroup(segmentGroup) {
   const newChildren = {};
-  for (const childOutlet of Object.keys(segmentGroup.children)) {
-    const child = segmentGroup.children[childOutlet];
+  for (const [childOutlet, child] of Object.entries(segmentGroup.children)) {
     const childCandidate = squashSegmentGroup(child);
     if (childOutlet === PRIMARY_OUTLET && childCandidate.segments.length === 0 && childCandidate.hasChildren()) {
       for (const [grandChildOutlet, grandChild] of Object.entries(childCandidate.children)) {
@@ -849,9 +844,7 @@ function getOutlets(commands) {
   };
 }
 function updateSegmentGroup(segmentGroup, startIndex, commands) {
-  if (!segmentGroup) {
-    segmentGroup = new UrlSegmentGroup([], {});
-  }
+  segmentGroup ??= new UrlSegmentGroup([], {});
   if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
     return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
   }
@@ -982,6 +975,26 @@ function compare(path, params, segment) {
   return path == segment.path && shallowEqual(params, segment.parameters);
 }
 var IMPERATIVE_NAVIGATION = "imperative";
+var EventType;
+(function(EventType2) {
+  EventType2[EventType2["NavigationStart"] = 0] = "NavigationStart";
+  EventType2[EventType2["NavigationEnd"] = 1] = "NavigationEnd";
+  EventType2[EventType2["NavigationCancel"] = 2] = "NavigationCancel";
+  EventType2[EventType2["NavigationError"] = 3] = "NavigationError";
+  EventType2[EventType2["RoutesRecognized"] = 4] = "RoutesRecognized";
+  EventType2[EventType2["ResolveStart"] = 5] = "ResolveStart";
+  EventType2[EventType2["ResolveEnd"] = 6] = "ResolveEnd";
+  EventType2[EventType2["GuardsCheckStart"] = 7] = "GuardsCheckStart";
+  EventType2[EventType2["GuardsCheckEnd"] = 8] = "GuardsCheckEnd";
+  EventType2[EventType2["RouteConfigLoadStart"] = 9] = "RouteConfigLoadStart";
+  EventType2[EventType2["RouteConfigLoadEnd"] = 10] = "RouteConfigLoadEnd";
+  EventType2[EventType2["ChildActivationStart"] = 11] = "ChildActivationStart";
+  EventType2[EventType2["ChildActivationEnd"] = 12] = "ChildActivationEnd";
+  EventType2[EventType2["ActivationStart"] = 13] = "ActivationStart";
+  EventType2[EventType2["ActivationEnd"] = 14] = "ActivationEnd";
+  EventType2[EventType2["Scroll"] = 15] = "Scroll";
+  EventType2[EventType2["NavigationSkipped"] = 16] = "NavigationSkipped";
+})(EventType || (EventType = {}));
 var RouterEvent = class {
   constructor(id, url) {
     this.id = id;
@@ -991,7 +1004,7 @@ var RouterEvent = class {
 var NavigationStart = class extends RouterEvent {
   constructor(id, url, navigationTrigger = "imperative", restoredState = null) {
     super(id, url);
-    this.type = 0;
+    this.type = EventType.NavigationStart;
     this.navigationTrigger = navigationTrigger;
     this.restoredState = restoredState;
   }
@@ -1004,19 +1017,31 @@ var NavigationEnd = class extends RouterEvent {
   constructor(id, url, urlAfterRedirects) {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
-    this.type = 1;
+    this.type = EventType.NavigationEnd;
   }
   /** @docsNotRequired */
   toString() {
     return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
   }
 };
+var NavigationCancellationCode;
+(function(NavigationCancellationCode2) {
+  NavigationCancellationCode2[NavigationCancellationCode2["Redirect"] = 0] = "Redirect";
+  NavigationCancellationCode2[NavigationCancellationCode2["SupersededByNewNavigation"] = 1] = "SupersededByNewNavigation";
+  NavigationCancellationCode2[NavigationCancellationCode2["NoDataFromResolver"] = 2] = "NoDataFromResolver";
+  NavigationCancellationCode2[NavigationCancellationCode2["GuardRejected"] = 3] = "GuardRejected";
+})(NavigationCancellationCode || (NavigationCancellationCode = {}));
+var NavigationSkippedCode;
+(function(NavigationSkippedCode2) {
+  NavigationSkippedCode2[NavigationSkippedCode2["IgnoredSameUrlNavigation"] = 0] = "IgnoredSameUrlNavigation";
+  NavigationSkippedCode2[NavigationSkippedCode2["IgnoredByUrlHandlingStrategy"] = 1] = "IgnoredByUrlHandlingStrategy";
+})(NavigationSkippedCode || (NavigationSkippedCode = {}));
 var NavigationCancel = class extends RouterEvent {
   constructor(id, url, reason, code) {
     super(id, url);
     this.reason = reason;
     this.code = code;
-    this.type = 2;
+    this.type = EventType.NavigationCancel;
   }
   /** @docsNotRequired */
   toString() {
@@ -1028,7 +1053,7 @@ var NavigationSkipped = class extends RouterEvent {
     super(id, url);
     this.reason = reason;
     this.code = code;
-    this.type = 16;
+    this.type = EventType.NavigationSkipped;
   }
 };
 var NavigationError = class extends RouterEvent {
@@ -1036,7 +1061,7 @@ var NavigationError = class extends RouterEvent {
     super(id, url);
     this.error = error;
     this.target = target;
-    this.type = 3;
+    this.type = EventType.NavigationError;
   }
   /** @docsNotRequired */
   toString() {
@@ -1048,7 +1073,7 @@ var RoutesRecognized = class extends RouterEvent {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
-    this.type = 4;
+    this.type = EventType.RoutesRecognized;
   }
   /** @docsNotRequired */
   toString() {
@@ -1060,7 +1085,7 @@ var GuardsCheckStart = class extends RouterEvent {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
-    this.type = 7;
+    this.type = EventType.GuardsCheckStart;
   }
   toString() {
     return `GuardsCheckStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
@@ -1072,7 +1097,7 @@ var GuardsCheckEnd = class extends RouterEvent {
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
     this.shouldActivate = shouldActivate;
-    this.type = 8;
+    this.type = EventType.GuardsCheckEnd;
   }
   toString() {
     return `GuardsCheckEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state}, shouldActivate: ${this.shouldActivate})`;
@@ -1083,7 +1108,7 @@ var ResolveStart = class extends RouterEvent {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
-    this.type = 5;
+    this.type = EventType.ResolveStart;
   }
   toString() {
     return `ResolveStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
@@ -1094,7 +1119,7 @@ var ResolveEnd = class extends RouterEvent {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
-    this.type = 6;
+    this.type = EventType.ResolveEnd;
   }
   toString() {
     return `ResolveEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
@@ -1103,7 +1128,7 @@ var ResolveEnd = class extends RouterEvent {
 var RouteConfigLoadStart = class {
   constructor(route) {
     this.route = route;
-    this.type = 9;
+    this.type = EventType.RouteConfigLoadStart;
   }
   toString() {
     return `RouteConfigLoadStart(path: ${this.route.path})`;
@@ -1112,7 +1137,7 @@ var RouteConfigLoadStart = class {
 var RouteConfigLoadEnd = class {
   constructor(route) {
     this.route = route;
-    this.type = 10;
+    this.type = EventType.RouteConfigLoadEnd;
   }
   toString() {
     return `RouteConfigLoadEnd(path: ${this.route.path})`;
@@ -1121,7 +1146,7 @@ var RouteConfigLoadEnd = class {
 var ChildActivationStart = class {
   constructor(snapshot) {
     this.snapshot = snapshot;
-    this.type = 11;
+    this.type = EventType.ChildActivationStart;
   }
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
@@ -1131,7 +1156,7 @@ var ChildActivationStart = class {
 var ChildActivationEnd = class {
   constructor(snapshot) {
     this.snapshot = snapshot;
-    this.type = 12;
+    this.type = EventType.ChildActivationEnd;
   }
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
@@ -1141,7 +1166,7 @@ var ChildActivationEnd = class {
 var ActivationStart = class {
   constructor(snapshot) {
     this.snapshot = snapshot;
-    this.type = 13;
+    this.type = EventType.ActivationStart;
   }
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
@@ -1151,7 +1176,7 @@ var ActivationStart = class {
 var ActivationEnd = class {
   constructor(snapshot) {
     this.snapshot = snapshot;
-    this.type = 14;
+    this.type = EventType.ActivationEnd;
   }
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
@@ -1163,7 +1188,7 @@ var Scroll = class {
     this.routerEvent = routerEvent;
     this.position = position;
     this.anchor = anchor;
-    this.type = 15;
+    this.type = EventType.Scroll;
   }
   toString() {
     const pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
@@ -1179,39 +1204,39 @@ var RedirectRequest = class {
 };
 function stringifyEvent(routerEvent) {
   switch (routerEvent.type) {
-    case 14:
+    case EventType.ActivationEnd:
       return `ActivationEnd(path: '${routerEvent.snapshot.routeConfig?.path || ""}')`;
-    case 13:
+    case EventType.ActivationStart:
       return `ActivationStart(path: '${routerEvent.snapshot.routeConfig?.path || ""}')`;
-    case 12:
+    case EventType.ChildActivationEnd:
       return `ChildActivationEnd(path: '${routerEvent.snapshot.routeConfig?.path || ""}')`;
-    case 11:
+    case EventType.ChildActivationStart:
       return `ChildActivationStart(path: '${routerEvent.snapshot.routeConfig?.path || ""}')`;
-    case 8:
+    case EventType.GuardsCheckEnd:
       return `GuardsCheckEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state}, shouldActivate: ${routerEvent.shouldActivate})`;
-    case 7:
+    case EventType.GuardsCheckStart:
       return `GuardsCheckStart(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case 2:
+    case EventType.NavigationCancel:
       return `NavigationCancel(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
-    case 16:
+    case EventType.NavigationSkipped:
       return `NavigationSkipped(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
-    case 1:
+    case EventType.NavigationEnd:
       return `NavigationEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}')`;
-    case 3:
+    case EventType.NavigationError:
       return `NavigationError(id: ${routerEvent.id}, url: '${routerEvent.url}', error: ${routerEvent.error})`;
-    case 0:
+    case EventType.NavigationStart:
       return `NavigationStart(id: ${routerEvent.id}, url: '${routerEvent.url}')`;
-    case 6:
+    case EventType.ResolveEnd:
       return `ResolveEnd(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case 5:
+    case EventType.ResolveStart:
       return `ResolveStart(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case 10:
+    case EventType.RouteConfigLoadEnd:
       return `RouteConfigLoadEnd(path: ${routerEvent.route.path})`;
-    case 9:
+    case EventType.RouteConfigLoadStart:
       return `RouteConfigLoadStart(path: ${routerEvent.route.path})`;
-    case 4:
+    case EventType.RoutesRecognized:
       return `RoutesRecognized(id: ${routerEvent.id}, url: '${routerEvent.url}', urlAfterRedirects: '${routerEvent.urlAfterRedirects}', state: ${routerEvent.state})`;
-    case 15:
+    case EventType.Scroll:
       const pos = routerEvent.position ? `${routerEvent.position[0]}, ${routerEvent.position[1]}` : null;
       return `Scroll(anchor: '${routerEvent.anchor}', position: '${pos}')`;
   }
@@ -1382,8 +1407,8 @@ var RouterState = class extends Tree {
     return this.snapshot.toString();
   }
 };
-function createEmptyState(urlTree, rootComponent) {
-  const snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
+function createEmptyState(rootComponent) {
+  const snapshot = createEmptyStateSnapshot(rootComponent);
   const emptyUrl = new BehaviorSubject([new UrlSegment("", {})]);
   const emptyParams = new BehaviorSubject({});
   const emptyData = new BehaviorSubject({});
@@ -1393,7 +1418,7 @@ function createEmptyState(urlTree, rootComponent) {
   activated.snapshot = snapshot.root;
   return new RouterState(new TreeNode(activated, []), snapshot);
 }
-function createEmptyStateSnapshot(urlTree, rootComponent) {
+function createEmptyStateSnapshot(rootComponent) {
   const emptyParams = {};
   const emptyData = {};
   const emptyQueryParams = {};
@@ -1449,9 +1474,7 @@ var ActivatedRoute = class {
    * The map supports retrieving single and multiple values from the same parameter.
    */
   get paramMap() {
-    if (!this._paramMap) {
-      this._paramMap = this.params.pipe(map((p) => convertToParamMap(p)));
-    }
+    this._paramMap ??= this.params.pipe(map((p) => convertToParamMap(p)));
     return this._paramMap;
   }
   /**
@@ -1459,9 +1482,7 @@ var ActivatedRoute = class {
    * The map supports retrieving single and multiple values from the query parameter.
    */
   get queryParamMap() {
-    if (!this._queryParamMap) {
-      this._queryParamMap = this.queryParams.pipe(map((p) => convertToParamMap(p)));
-    }
+    this._queryParamMap ??= this.queryParams.pipe(map((p) => convertToParamMap(p)));
     return this._queryParamMap;
   }
   toString() {
@@ -1531,15 +1552,11 @@ var ActivatedRouteSnapshot = class {
     return this._routerState.pathFromRoot(this);
   }
   get paramMap() {
-    if (!this._paramMap) {
-      this._paramMap = convertToParamMap(this.params);
-    }
+    this._paramMap ??= convertToParamMap(this.params);
     return this._paramMap;
   }
   get queryParamMap() {
-    if (!this._queryParamMap) {
-      this._queryParamMap = convertToParamMap(this.queryParams);
-    }
+    this._queryParamMap ??= convertToParamMap(this.queryParams);
     return this._queryParamMap;
   }
   toString() {
@@ -1910,25 +1927,22 @@ function redirectingNavigationError(urlSerializer, redirect) {
     redirectTo: redirect,
     navigationBehaviorOptions: void 0
   } : redirect;
-  const error = navigationCancelingError(ngDevMode && `Redirecting to "${urlSerializer.serialize(redirectTo)}"`, 0, redirect);
+  const error = navigationCancelingError(ngDevMode && `Redirecting to "${urlSerializer.serialize(redirectTo)}"`, NavigationCancellationCode.Redirect);
   error.url = redirectTo;
   error.navigationBehaviorOptions = navigationBehaviorOptions;
   return error;
 }
-function navigationCancelingError(message, code, redirectUrl) {
-  const error = new Error("NavigationCancelingError: " + (message || ""));
+function navigationCancelingError(message, code) {
+  const error = new Error(`NavigationCancelingError: ${message || ""}`);
   error[NAVIGATION_CANCELING_ERROR] = true;
   error.cancellationCode = code;
-  if (redirectUrl) {
-    error.url = redirectUrl;
-  }
   return error;
 }
-function isRedirectingNavigationCancelingError$1(error) {
-  return isNavigationCancelingError$1(error) && isUrlTree(error.url);
+function isRedirectingNavigationCancelingError(error) {
+  return isNavigationCancelingError(error) && isUrlTree(error.url);
 }
-function isNavigationCancelingError$1(error) {
-  return error && error[NAVIGATION_CANCELING_ERROR];
+function isNavigationCancelingError(error) {
+  return !!error && error[NAVIGATION_CANCELING_ERROR];
 }
 var _ɵEmptyOutletComponent = class _ɵEmptyOutletComponent {
 };
@@ -2152,8 +2166,8 @@ var ActivateRoutes = class {
     const context = parentContexts.getContext(route.value.outlet);
     const contexts = context && route.value.component ? context.children : parentContexts;
     const children = nodeChildrenAsMap(route);
-    for (const childOutlet of Object.keys(children)) {
-      this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
+    for (const treeNode of Object.values(children)) {
+      this.deactivateRouteAndItsChildren(treeNode, contexts);
     }
     if (context && context.outlet) {
       const componentRef = context.outlet.detach();
@@ -2169,8 +2183,8 @@ var ActivateRoutes = class {
     const context = parentContexts.getContext(route.value.outlet);
     const contexts = context && route.value.component ? context.children : parentContexts;
     const children = nodeChildrenAsMap(route);
-    for (const childOutlet of Object.keys(children)) {
-      this.deactivateRouteAndItsChildren(children[childOutlet], contexts);
+    for (const treeNode of Object.values(children)) {
+      this.deactivateRouteAndItsChildren(treeNode, contexts);
     }
     if (context) {
       if (context.outlet) {
@@ -2541,11 +2555,7 @@ function namedOutletsRedirect(redirectTo) {
   return throwError(new RuntimeError(4e3, (typeof ngDevMode === "undefined" || ngDevMode) && `Only absolute redirects can have named outlets. redirectTo: '${redirectTo}'`));
 }
 function canLoadFails(route) {
-  return throwError(navigationCancelingError(
-    (typeof ngDevMode === "undefined" || ngDevMode) && `Cannot load children because the guard of the route "path: '${route.path}'" returned false`,
-    3
-    /* NavigationCancellationCode.GuardRejected */
-  ));
+  return throwError(navigationCancelingError((typeof ngDevMode === "undefined" || ngDevMode) && `Cannot load children because the guard of the route "path: '${route.path}'" returned false`, NavigationCancellationCode.GuardRejected));
 }
 var ApplyRedirects = class {
   constructor(urlSerializer, urlTree) {
@@ -2686,7 +2696,7 @@ function split(segmentGroup, consumedSegments, slicedSegments, config) {
     };
   }
   if (slicedSegments.length === 0 && containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
-    const s2 = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, config, segmentGroup.children));
+    const s2 = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
     return {
       segmentGroup: s2,
       slicedSegments
@@ -2698,7 +2708,7 @@ function split(segmentGroup, consumedSegments, slicedSegments, config) {
     slicedSegments
   };
 }
-function addEmptyPathsToChildrenIfNeeded(segmentGroup, consumedSegments, slicedSegments, routes, children) {
+function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
   const res = {};
   for (const r of routes) {
     if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
@@ -3180,7 +3190,7 @@ var ROUTER_CONFIGURATION = new InjectionToken(typeof ngDevMode === "undefined" |
   providedIn: "root",
   factory: () => ({})
 });
-var ROUTES = new InjectionToken("ROUTES");
+var ROUTES = new InjectionToken(ngDevMode ? "ROUTES" : "");
 var _RouterConfigLoader = class _RouterConfigLoader {
   constructor() {
     this.componentLoaders = /* @__PURE__ */ new WeakMap();
@@ -3469,13 +3479,7 @@ var _NavigationTransitions = class _NavigationTransitions {
             const onSameUrlNavigation = t.extras.onSameUrlNavigation ?? router.onSameUrlNavigation;
             if (!urlTransition && onSameUrlNavigation !== "reload") {
               const reason = typeof ngDevMode === "undefined" || ngDevMode ? `Navigation to ${t.rawUrl} was ignored because it is the same as the current Router URL.` : "";
-              this.events.next(new NavigationSkipped(
-                t.id,
-                this.urlSerializer.serialize(t.rawUrl),
-                reason,
-                0
-                /* NavigationSkippedCode.IgnoredSameUrlNavigation */
-              ));
+              this.events.next(new NavigationSkipped(t.id, this.urlSerializer.serialize(t.rawUrl), reason, NavigationSkippedCode.IgnoredSameUrlNavigation));
               t.resolve(null);
               return EMPTY;
             }
@@ -3513,7 +3517,7 @@ var _NavigationTransitions = class _NavigationTransitions {
               } = t;
               const navStart = new NavigationStart(id, this.urlSerializer.serialize(extractedUrl), source, restoredState);
               this.events.next(navStart);
-              const targetSnapshot = createEmptyState(extractedUrl, this.rootComponentType).snapshot;
+              const targetSnapshot = createEmptyState(this.rootComponentType).snapshot;
               this.currentTransition = overallTransitionState = __spreadProps(__spreadValues({}, t), {
                 targetSnapshot,
                 urlAfterRedirects: extractedUrl,
@@ -3526,13 +3530,7 @@ var _NavigationTransitions = class _NavigationTransitions {
               return of(overallTransitionState);
             } else {
               const reason = typeof ngDevMode === "undefined" || ngDevMode ? `Navigation was ignored because the UrlHandlingStrategy indicated neither the current URL ${t.currentRawUrl} nor target URL ${t.rawUrl} should be processed.` : "";
-              this.events.next(new NavigationSkipped(
-                t.id,
-                this.urlSerializer.serialize(t.extractedUrl),
-                reason,
-                1
-                /* NavigationSkippedCode.IgnoredByUrlHandlingStrategy */
-              ));
+              this.events.next(new NavigationSkipped(t.id, this.urlSerializer.serialize(t.extractedUrl), reason, NavigationSkippedCode.IgnoredByUrlHandlingStrategy));
               t.resolve(null);
               return EMPTY;
             }
@@ -3559,12 +3557,7 @@ var _NavigationTransitions = class _NavigationTransitions {
           }),
           filter((t) => {
             if (!t.guardsResult) {
-              this.cancelNavigationTransition(
-                t,
-                "",
-                3
-                /* NavigationCancellationCode.GuardRejected */
-              );
+              this.cancelNavigationTransition(t, "", NavigationCancellationCode.GuardRejected);
               return false;
             }
             return true;
@@ -3581,12 +3574,7 @@ var _NavigationTransitions = class _NavigationTransitions {
                   next: () => dataResolved = true,
                   complete: () => {
                     if (!dataResolved) {
-                      this.cancelNavigationTransition(
-                        t2,
-                        typeof ngDevMode === "undefined" || ngDevMode ? `At least one route resolver didn't emit any value.` : "",
-                        2
-                        /* NavigationCancellationCode.NoDataFromResolver */
-                      );
+                      this.cancelNavigationTransition(t2, typeof ngDevMode === "undefined" || ngDevMode ? `At least one route resolver didn't emit any value.` : "", NavigationCancellationCode.NoDataFromResolver);
                     }
                   }
                 }));
@@ -3663,12 +3651,7 @@ var _NavigationTransitions = class _NavigationTransitions {
           finalize(() => {
             if (!completed && !errored) {
               const cancelationReason = typeof ngDevMode === "undefined" || ngDevMode ? `Navigation ID ${overallTransitionState.id} is not equal to the current navigation id ${this.navigationId}` : "";
-              this.cancelNavigationTransition(
-                overallTransitionState,
-                cancelationReason,
-                1
-                /* NavigationCancellationCode.SupersededByNewNavigation */
-              );
+              this.cancelNavigationTransition(overallTransitionState, cancelationReason, NavigationCancellationCode.SupersededByNewNavigation);
             }
             if (this.currentNavigation?.id === overallTransitionState.id) {
               this.currentNavigation = null;
@@ -3676,9 +3659,9 @@ var _NavigationTransitions = class _NavigationTransitions {
           }),
           catchError((e) => {
             errored = true;
-            if (isNavigationCancelingError$1(e)) {
+            if (isNavigationCancelingError(e)) {
               this.events.next(new NavigationCancel(overallTransitionState.id, this.urlSerializer.serialize(overallTransitionState.extractedUrl), e.message, e.cancellationCode));
-              if (!isRedirectingNavigationCancelingError$1(e)) {
+              if (!isRedirectingNavigationCancelingError(e)) {
                 overallTransitionState.resolve(false);
               } else {
                 this.events.next(new RedirectRequest(e.url));
@@ -3688,7 +3671,11 @@ var _NavigationTransitions = class _NavigationTransitions {
               try {
                 overallTransitionState.resolve(router.errorHandler(e));
               } catch (ee) {
-                overallTransitionState.reject(ee);
+                if (this.options.resolveNavigationPromiseOnError) {
+                  overallTransitionState.resolve(false);
+                } else {
+                  overallTransitionState.reject(ee);
+                }
               }
             }
             return EMPTY;
@@ -3791,7 +3778,7 @@ var BaseRouteReuseStrategy = class {
 };
 var _DefaultRouteReuseStrategy = class _DefaultRouteReuseStrategy extends BaseRouteReuseStrategy {
 };
-_DefaultRouteReuseStrategy.ɵfac = (() => {
+_DefaultRouteReuseStrategy.ɵfac = /* @__PURE__ */ (() => {
   let ɵDefaultRouteReuseStrategy_BaseFactory;
   return function DefaultRouteReuseStrategy_Factory(t) {
     return (ɵDefaultRouteReuseStrategy_BaseFactory || (ɵDefaultRouteReuseStrategy_BaseFactory = ɵɵgetInheritedFactory(_DefaultRouteReuseStrategy)))(t || _DefaultRouteReuseStrategy);
@@ -3846,7 +3833,7 @@ var _HistoryStateManager = class _HistoryStateManager extends StateManager {
     this.rawUrlTree = this.currentUrlTree;
     this.currentPageId = 0;
     this.lastSuccessfulId = -1;
-    this.routerState = createEmptyState(this.currentUrlTree, null);
+    this.routerState = createEmptyState(null);
     this.stateMemento = this.createStateMemento();
   }
   getCurrentUrlTree() {
@@ -3907,7 +3894,7 @@ var _HistoryStateManager = class _HistoryStateManager extends StateManager {
           this.setBrowserUrl(this.rawUrlTree, currentTransition);
         }
       }
-    } else if (e instanceof NavigationCancel && (e.code === 3 || e.code === 2)) {
+    } else if (e instanceof NavigationCancel && (e.code === NavigationCancellationCode.GuardRejected || e.code === NavigationCancellationCode.NoDataFromResolver)) {
       this.restoreHistory(currentTransition);
     } else if (e instanceof NavigationError) {
       this.restoreHistory(currentTransition, true);
@@ -3969,7 +3956,7 @@ var _HistoryStateManager = class _HistoryStateManager extends StateManager {
     };
   }
 };
-_HistoryStateManager.ɵfac = (() => {
+_HistoryStateManager.ɵfac = /* @__PURE__ */ (() => {
   let ɵHistoryStateManager_BaseFactory;
   return function HistoryStateManager_Factory(t) {
     return (ɵHistoryStateManager_BaseFactory || (ɵHistoryStateManager_BaseFactory = ɵɵgetInheritedFactory(_HistoryStateManager)))(t || _HistoryStateManager);
@@ -4000,7 +3987,7 @@ function afterNextNavigation(router, action) {
     if (e instanceof NavigationEnd || e instanceof NavigationSkipped) {
       return NavigationResult.COMPLETE;
     }
-    const redirecting = e instanceof NavigationCancel ? e.code === 0 || e.code === 1 : false;
+    const redirecting = e instanceof NavigationCancel ? e.code === NavigationCancellationCode.Redirect || e.code === NavigationCancellationCode.SupersededByNewNavigation : false;
     return redirecting ? NavigationResult.REDIRECTING : NavigationResult.FAILED;
   }), filter((result) => result !== NavigationResult.REDIRECTING), take(1)).subscribe(() => {
     action();
@@ -4082,13 +4069,15 @@ var _Router = class _Router {
         const currentNavigation = this.navigationTransitions.currentNavigation;
         if (currentTransition !== null && currentNavigation !== null) {
           this.stateManager.handleRouterEvent(e, currentNavigation);
-          if (e instanceof NavigationCancel && e.code !== 0 && e.code !== 1) {
+          if (e instanceof NavigationCancel && e.code !== NavigationCancellationCode.Redirect && e.code !== NavigationCancellationCode.SupersededByNewNavigation) {
             this.navigated = true;
           } else if (e instanceof NavigationEnd) {
             this.navigated = true;
           } else if (e instanceof RedirectRequest) {
             const mergedTree = this.urlHandlingStrategy.merge(e.url, currentTransition.currentRawUrl);
             const extras = {
+              // Persist transient navigation info from the original navigation request.
+              info: currentTransition.extras.info,
               skipLocationChange: currentTransition.extras.skipLocationChange,
               // The URL is already updated at this point if we have 'eager' URL
               // updates or if the navigation was triggered by the browser (back
@@ -4132,13 +4121,11 @@ var _Router = class _Router {
    * navigation so that the correct events, guards, etc. are triggered.
    */
   setUpLocationChangeListener() {
-    if (!this.nonRouterCurrentEntryChangeSubscription) {
-      this.nonRouterCurrentEntryChangeSubscription = this.stateManager.registerNonRouterCurrentEntryChangeListener((url, state) => {
-        setTimeout(() => {
-          this.navigateToSyncWithBrowser(url, "popstate", state);
-        }, 0);
-      });
-    }
+    this.nonRouterCurrentEntryChangeSubscription ??= this.stateManager.registerNonRouterCurrentEntryChangeListener((url, state) => {
+      setTimeout(() => {
+        this.navigateToSyncWithBrowser(url, "popstate", state);
+      }, 0);
+    });
   }
   /**
    * Schedules a router navigation to synchronize Router state with the browser state.
@@ -4347,9 +4334,9 @@ var _Router = class _Router {
    * @param extras An options object that determines how the URL should be constructed or
    *     interpreted.
    *
-   * @returns A Promise that resolves to `true` when navigation succeeds, to `false` when navigation
-   *     fails,
-   * or is rejected on error.
+   * @returns A Promise that resolves to `true` when navigation succeeds, or `false` when navigation
+   *     fails. The Promise is rejected when an error occurs if `resolveNavigationPromiseOnError` is
+   * not `true`.
    *
    * @usageNotes
    *
@@ -4399,8 +4386,7 @@ var _Router = class _Router {
     return containsTree(this.currentUrlTree, urlTree, options);
   }
   removeEmptyProps(params) {
-    return Object.keys(params).reduce((result, key) => {
-      const value = params[key];
+    return Object.entries(params).reduce((result, [key, value]) => {
       if (value !== null && value !== void 0) {
         result[key] = value;
       }
@@ -4535,7 +4521,8 @@ var _RouterLink = class _RouterLink {
   }
   /** @nodoc */
   onClick(button, ctrlKey, shiftKey, altKey, metaKey) {
-    if (this.urlTree === null) {
+    const urlTree = this.urlTree;
+    if (urlTree === null) {
       return true;
     }
     if (this.isAnchorElement) {
@@ -4549,9 +4536,10 @@ var _RouterLink = class _RouterLink {
     const extras = {
       skipLocationChange: this.skipLocationChange,
       replaceUrl: this.replaceUrl,
-      state: this.state
+      state: this.state,
+      info: this.info
     };
-    this.router.navigateByUrl(this.urlTree, extras);
+    this.router.navigateByUrl(urlTree, extras);
     return !this.isAnchorElement;
   }
   /** @nodoc */
@@ -4559,7 +4547,8 @@ var _RouterLink = class _RouterLink {
     this.subscription?.unsubscribe();
   }
   updateHref() {
-    this.href = this.urlTree !== null && this.locationStrategy ? this.locationStrategy?.prepareExternalUrl(this.router.serializeUrl(this.urlTree)) : null;
+    const urlTree = this.urlTree;
+    this.href = urlTree !== null && this.locationStrategy ? this.locationStrategy?.prepareExternalUrl(this.router.serializeUrl(urlTree)) : null;
     const sanitizedValue = this.href === null ? null : (
       // This class represents a directive that can be added to both `<a>` elements,
       // as well as other elements. As a result, we can't define security context at
@@ -4622,10 +4611,11 @@ _RouterLink.ɵdir = ɵɵdefineDirective({
     fragment: "fragment",
     queryParamsHandling: "queryParamsHandling",
     state: "state",
+    info: "info",
     relativeTo: "relativeTo",
-    preserveFragment: ["preserveFragment", "preserveFragment", booleanAttribute],
-    skipLocationChange: ["skipLocationChange", "skipLocationChange", booleanAttribute],
-    replaceUrl: ["replaceUrl", "replaceUrl", booleanAttribute],
+    preserveFragment: [InputFlags.HasDecoratorInputTransform, "preserveFragment", "preserveFragment", booleanAttribute],
+    skipLocationChange: [InputFlags.HasDecoratorInputTransform, "skipLocationChange", "skipLocationChange", booleanAttribute],
+    replaceUrl: [InputFlags.HasDecoratorInputTransform, "replaceUrl", "replaceUrl", booleanAttribute],
     routerLink: "routerLink"
   },
   standalone: true,
@@ -4672,6 +4662,9 @@ var RouterLink = _RouterLink;
       type: Input
     }],
     state: [{
+      type: Input
+    }],
+    info: [{
       type: Input
     }],
     relativeTo: [{
@@ -4784,7 +4777,10 @@ var _RouterLinkActive = class _RouterLinkActive {
       // While the types should disallow `undefined` here, it's possible without strict inputs
       this.routerLinkActiveOptions.exact || false
     );
-    return (link) => link.urlTree ? router.isActive(link.urlTree, options) : false;
+    return (link) => {
+      const urlTree = link.urlTree;
+      return urlTree ? router.isActive(urlTree, options) : false;
+    };
   }
   hasActiveLinks() {
     const isActiveCheckFn = this.isLinkActive(this.router);
@@ -5012,8 +5008,8 @@ var _RouterScroller = class _RouterScroller {
     this.lastSource = "imperative";
     this.restoredId = 0;
     this.store = {};
-    options.scrollPositionRestoration = options.scrollPositionRestoration || "disabled";
-    options.anchorScrolling = options.anchorScrolling || "disabled";
+    options.scrollPositionRestoration ||= "disabled";
+    options.anchorScrolling ||= "disabled";
   }
   init() {
     if (this.options.scrollPositionRestoration !== "disabled") {
@@ -5031,7 +5027,7 @@ var _RouterScroller = class _RouterScroller {
       } else if (e instanceof NavigationEnd) {
         this.lastId = e.id;
         this.scheduleScrollEvent(e, this.urlSerializer.parse(e.urlAfterRedirects).fragment);
-      } else if (e instanceof NavigationSkipped && e.code === 0) {
+      } else if (e instanceof NavigationSkipped && e.code === NavigationSkippedCode.IgnoredSameUrlNavigation) {
         this.lastSource = void 0;
         this.restoredId = 0;
         this.scheduleScrollEvent(e, this.urlSerializer.parse(e.url).fragment);
@@ -5500,7 +5496,7 @@ function mapToCanDeactivate(providers) {
 function mapToResolve(provider) {
   return (...params) => inject(provider).resolve(...params);
 }
-var VERSION = new Version("17.0.8");
+var VERSION = new Version("17.2.1");
 export {
   ActivatedRoute,
   ActivatedRouteSnapshot,
@@ -5512,12 +5508,15 @@ export {
   ChildrenOutletContexts,
   DefaultTitleStrategy,
   DefaultUrlSerializer,
+  EventType,
   GuardsCheckEnd,
   GuardsCheckStart,
   NavigationCancel,
+  NavigationCancellationCode,
   NavigationEnd,
   NavigationError,
   NavigationSkipped,
+  NavigationSkippedCode,
   NavigationStart,
   NoPreloading,
   OutletContext,
@@ -5580,7 +5579,7 @@ export {
 
 @angular/router/fesm2022/router.mjs:
   (**
-   * @license Angular v17.0.8
+   * @license Angular v17.2.1
    * (c) 2010-2022 Google LLC. https://angular.io/
    * License: MIT
    *)

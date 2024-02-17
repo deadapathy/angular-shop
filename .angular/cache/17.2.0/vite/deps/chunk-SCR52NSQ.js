@@ -8,7 +8,7 @@ import {
   isPlatformServer,
   parseCookieValue,
   setRootDomAdapter
-} from "./chunk-WWCMP3W4.js";
+} from "./chunk-VJCTHPFZ.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   APP_ID,
@@ -23,7 +23,6 @@ import {
   Inject,
   Injectable,
   InjectionToken,
-  Injector,
   NgModule,
   NgZone,
   Observable,
@@ -81,13 +80,13 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-QVLHSLBS.js";
+} from "./chunk-SLHZH7H3.js";
 import {
   __async,
   __objRest,
   __spreadProps,
   __spreadValues
-} from "./chunk-A7YNPLSR.js";
+} from "./chunk-IEMOZLTW.js";
 
 // node_modules/@angular/common/fesm2022/http.mjs
 var HttpHandler = class {
@@ -679,12 +678,8 @@ var HttpRequest = class _HttpRequest {
       }
       this.transferCache = options.transferCache;
     }
-    if (!this.headers) {
-      this.headers = new HttpHeaders();
-    }
-    if (!this.context) {
-      this.context = new HttpContext();
-    }
+    this.headers ??= new HttpHeaders();
+    this.context ??= new HttpContext();
     if (!this.params) {
       this.params = new HttpParams();
       this.urlWithParams = url;
@@ -790,7 +785,7 @@ var HttpResponseBase = class {
    * The single parameter accepted is an initialization hash. Any properties
    * of the response passed there will override the default values.
    */
-  constructor(init, defaultStatus = 200, defaultStatusText = "OK") {
+  constructor(init, defaultStatus = HttpStatusCode.Ok, defaultStatusText = "OK") {
     this.headers = init.headers || new HttpHeaders();
     this.status = init.status !== void 0 ? init.status : defaultStatus;
     this.statusText = init.statusText || defaultStatusText;
@@ -851,6 +846,72 @@ var HttpErrorResponse = class extends HttpResponseBase {
     this.error = init.error || null;
   }
 };
+var HttpStatusCode;
+(function(HttpStatusCode2) {
+  HttpStatusCode2[HttpStatusCode2["Continue"] = 100] = "Continue";
+  HttpStatusCode2[HttpStatusCode2["SwitchingProtocols"] = 101] = "SwitchingProtocols";
+  HttpStatusCode2[HttpStatusCode2["Processing"] = 102] = "Processing";
+  HttpStatusCode2[HttpStatusCode2["EarlyHints"] = 103] = "EarlyHints";
+  HttpStatusCode2[HttpStatusCode2["Ok"] = 200] = "Ok";
+  HttpStatusCode2[HttpStatusCode2["Created"] = 201] = "Created";
+  HttpStatusCode2[HttpStatusCode2["Accepted"] = 202] = "Accepted";
+  HttpStatusCode2[HttpStatusCode2["NonAuthoritativeInformation"] = 203] = "NonAuthoritativeInformation";
+  HttpStatusCode2[HttpStatusCode2["NoContent"] = 204] = "NoContent";
+  HttpStatusCode2[HttpStatusCode2["ResetContent"] = 205] = "ResetContent";
+  HttpStatusCode2[HttpStatusCode2["PartialContent"] = 206] = "PartialContent";
+  HttpStatusCode2[HttpStatusCode2["MultiStatus"] = 207] = "MultiStatus";
+  HttpStatusCode2[HttpStatusCode2["AlreadyReported"] = 208] = "AlreadyReported";
+  HttpStatusCode2[HttpStatusCode2["ImUsed"] = 226] = "ImUsed";
+  HttpStatusCode2[HttpStatusCode2["MultipleChoices"] = 300] = "MultipleChoices";
+  HttpStatusCode2[HttpStatusCode2["MovedPermanently"] = 301] = "MovedPermanently";
+  HttpStatusCode2[HttpStatusCode2["Found"] = 302] = "Found";
+  HttpStatusCode2[HttpStatusCode2["SeeOther"] = 303] = "SeeOther";
+  HttpStatusCode2[HttpStatusCode2["NotModified"] = 304] = "NotModified";
+  HttpStatusCode2[HttpStatusCode2["UseProxy"] = 305] = "UseProxy";
+  HttpStatusCode2[HttpStatusCode2["Unused"] = 306] = "Unused";
+  HttpStatusCode2[HttpStatusCode2["TemporaryRedirect"] = 307] = "TemporaryRedirect";
+  HttpStatusCode2[HttpStatusCode2["PermanentRedirect"] = 308] = "PermanentRedirect";
+  HttpStatusCode2[HttpStatusCode2["BadRequest"] = 400] = "BadRequest";
+  HttpStatusCode2[HttpStatusCode2["Unauthorized"] = 401] = "Unauthorized";
+  HttpStatusCode2[HttpStatusCode2["PaymentRequired"] = 402] = "PaymentRequired";
+  HttpStatusCode2[HttpStatusCode2["Forbidden"] = 403] = "Forbidden";
+  HttpStatusCode2[HttpStatusCode2["NotFound"] = 404] = "NotFound";
+  HttpStatusCode2[HttpStatusCode2["MethodNotAllowed"] = 405] = "MethodNotAllowed";
+  HttpStatusCode2[HttpStatusCode2["NotAcceptable"] = 406] = "NotAcceptable";
+  HttpStatusCode2[HttpStatusCode2["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
+  HttpStatusCode2[HttpStatusCode2["RequestTimeout"] = 408] = "RequestTimeout";
+  HttpStatusCode2[HttpStatusCode2["Conflict"] = 409] = "Conflict";
+  HttpStatusCode2[HttpStatusCode2["Gone"] = 410] = "Gone";
+  HttpStatusCode2[HttpStatusCode2["LengthRequired"] = 411] = "LengthRequired";
+  HttpStatusCode2[HttpStatusCode2["PreconditionFailed"] = 412] = "PreconditionFailed";
+  HttpStatusCode2[HttpStatusCode2["PayloadTooLarge"] = 413] = "PayloadTooLarge";
+  HttpStatusCode2[HttpStatusCode2["UriTooLong"] = 414] = "UriTooLong";
+  HttpStatusCode2[HttpStatusCode2["UnsupportedMediaType"] = 415] = "UnsupportedMediaType";
+  HttpStatusCode2[HttpStatusCode2["RangeNotSatisfiable"] = 416] = "RangeNotSatisfiable";
+  HttpStatusCode2[HttpStatusCode2["ExpectationFailed"] = 417] = "ExpectationFailed";
+  HttpStatusCode2[HttpStatusCode2["ImATeapot"] = 418] = "ImATeapot";
+  HttpStatusCode2[HttpStatusCode2["MisdirectedRequest"] = 421] = "MisdirectedRequest";
+  HttpStatusCode2[HttpStatusCode2["UnprocessableEntity"] = 422] = "UnprocessableEntity";
+  HttpStatusCode2[HttpStatusCode2["Locked"] = 423] = "Locked";
+  HttpStatusCode2[HttpStatusCode2["FailedDependency"] = 424] = "FailedDependency";
+  HttpStatusCode2[HttpStatusCode2["TooEarly"] = 425] = "TooEarly";
+  HttpStatusCode2[HttpStatusCode2["UpgradeRequired"] = 426] = "UpgradeRequired";
+  HttpStatusCode2[HttpStatusCode2["PreconditionRequired"] = 428] = "PreconditionRequired";
+  HttpStatusCode2[HttpStatusCode2["TooManyRequests"] = 429] = "TooManyRequests";
+  HttpStatusCode2[HttpStatusCode2["RequestHeaderFieldsTooLarge"] = 431] = "RequestHeaderFieldsTooLarge";
+  HttpStatusCode2[HttpStatusCode2["UnavailableForLegalReasons"] = 451] = "UnavailableForLegalReasons";
+  HttpStatusCode2[HttpStatusCode2["InternalServerError"] = 500] = "InternalServerError";
+  HttpStatusCode2[HttpStatusCode2["NotImplemented"] = 501] = "NotImplemented";
+  HttpStatusCode2[HttpStatusCode2["BadGateway"] = 502] = "BadGateway";
+  HttpStatusCode2[HttpStatusCode2["ServiceUnavailable"] = 503] = "ServiceUnavailable";
+  HttpStatusCode2[HttpStatusCode2["GatewayTimeout"] = 504] = "GatewayTimeout";
+  HttpStatusCode2[HttpStatusCode2["HttpVersionNotSupported"] = 505] = "HttpVersionNotSupported";
+  HttpStatusCode2[HttpStatusCode2["VariantAlsoNegotiates"] = 506] = "VariantAlsoNegotiates";
+  HttpStatusCode2[HttpStatusCode2["InsufficientStorage"] = 507] = "InsufficientStorage";
+  HttpStatusCode2[HttpStatusCode2["LoopDetected"] = 508] = "LoopDetected";
+  HttpStatusCode2[HttpStatusCode2["NotExtended"] = 510] = "NotExtended";
+  HttpStatusCode2[HttpStatusCode2["NetworkAuthenticationRequired"] = 511] = "NetworkAuthenticationRequired";
+})(HttpStatusCode || (HttpStatusCode = {}));
 function addBody(options, body) {
   return {
     body,
@@ -1182,7 +1243,7 @@ var _FetchBackend = class _FetchBackend {
         }
       }
       if (status === 0) {
-        status = body ? 200 : 0;
+        status = body ? HttpStatusCode.Ok : 0;
       }
       const ok = status >= 200 && status < 300;
       if (ok) {
@@ -1416,7 +1477,7 @@ var _JsonpClientBackend = class _JsonpClientBackend {
           }
           observer.next(new HttpResponse({
             body,
-            status: 200,
+            status: HttpStatusCode.Ok,
             statusText: "OK",
             url
           }));
@@ -1447,9 +1508,7 @@ var _JsonpClientBackend = class _JsonpClientBackend {
     });
   }
   removeListeners(script) {
-    if (!foreignDocument) {
-      foreignDocument = this.document.implementation.createHTMLDocument();
-    }
+    foreignDocument ??= this.document.implementation.createHTMLDocument();
     foreignDocument.adoptNode(script);
   }
 };
@@ -1581,11 +1640,11 @@ var _HttpXhrBackend = class _HttpXhrBackend {
             url
           } = partialFromXhr();
           let body = null;
-          if (status !== 204) {
+          if (status !== HttpStatusCode.NoContent) {
             body = typeof xhr.response === "undefined" ? xhr.responseText : xhr.response;
           }
           if (status === 0) {
-            status = !!body ? 200 : 0;
+            status = !!body ? HttpStatusCode.Ok : 0;
           }
           let ok = status >= 200 && status < 300;
           if (req.responseType === "json" && typeof body === "string") {
@@ -1712,14 +1771,14 @@ var HttpXhrBackend = _HttpXhrBackend;
     type: XhrFactory
   }], null);
 })();
-var XSRF_ENABLED = new InjectionToken("XSRF_ENABLED");
+var XSRF_ENABLED = new InjectionToken(ngDevMode ? "XSRF_ENABLED" : "");
 var XSRF_DEFAULT_COOKIE_NAME = "XSRF-TOKEN";
-var XSRF_COOKIE_NAME = new InjectionToken("XSRF_COOKIE_NAME", {
+var XSRF_COOKIE_NAME = new InjectionToken(ngDevMode ? "XSRF_COOKIE_NAME" : "", {
   providedIn: "root",
   factory: () => XSRF_DEFAULT_COOKIE_NAME
 });
 var XSRF_DEFAULT_HEADER_NAME = "X-XSRF-TOKEN";
-var XSRF_HEADER_NAME = new InjectionToken("XSRF_HEADER_NAME", {
+var XSRF_HEADER_NAME = new InjectionToken(ngDevMode ? "XSRF_HEADER_NAME" : "", {
   providedIn: "root",
   factory: () => XSRF_DEFAULT_HEADER_NAME
 });
@@ -1860,7 +1919,7 @@ function provideHttpClient(...features) {
   }
   return makeEnvironmentProviders(providers);
 }
-var LEGACY_INTERCEPTOR_FN = new InjectionToken("LEGACY_INTERCEPTOR_FN");
+var LEGACY_INTERCEPTOR_FN = new InjectionToken(ngDevMode ? "LEGACY_INTERCEPTOR_FN" : "");
 function withInterceptorsFromDi() {
   return makeHttpFeature(HttpFeatureKind.LegacyInterceptors, [{
     provide: LEGACY_INTERCEPTOR_FN,
@@ -2110,10 +2169,12 @@ function makeCacheKey(request) {
     params,
     method,
     responseType,
-    url
+    url,
+    body
   } = request;
   const encodedParams = params.keys().sort().map((k) => `${k}=${params.getAll(k)}`).join("&");
-  const key = method + "." + responseType + "." + url + "?" + encodedParams;
+  const strBody = typeof body === "string" ? body : "";
+  const key = [method, responseType, url, strBody, encodedParams].join("|");
   const hash = generateHash(key);
   return makeStateKey(hash);
 }
@@ -2265,12 +2326,10 @@ var BrowserGetTestability = class {
     const whenAllStable = (callback) => {
       const testabilities = _global["getAllAngularTestabilities"]();
       let count = testabilities.length;
-      let didWork = false;
-      const decrement = function(didWork_) {
-        didWork = didWork || didWork_;
+      const decrement = function() {
         count--;
         if (count == 0) {
-          callback(didWork);
+          callback();
         }
       };
       testabilities.forEach((testability) => {
@@ -2316,7 +2375,7 @@ var BrowserXhr = _BrowserXhr;
     type: Injectable
   }], null, null);
 })();
-var EVENT_MANAGER_PLUGINS = new InjectionToken("EventManagerPlugins");
+var EVENT_MANAGER_PLUGINS = new InjectionToken(ngDevMode ? "EventManagerPlugins" : "");
 var _EventManager = class _EventManager {
   /**
    * Initializes an instance of the event-manager service.
@@ -2572,7 +2631,7 @@ var COMPONENT_VARIABLE = "%COMP%";
 var HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 var CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
 var REMOVE_STYLES_ON_COMPONENT_DESTROY_DEFAULT = true;
-var REMOVE_STYLES_ON_COMPONENT_DESTROY = new InjectionToken("RemoveStylesOnCompDestroy", {
+var REMOVE_STYLES_ON_COMPONENT_DESTROY = new InjectionToken(ngDevMode ? "RemoveStylesOnCompDestroy" : "", {
   providedIn: "root",
   factory: () => REMOVE_STYLES_ON_COMPONENT_DESTROY_DEFAULT
 });
@@ -3161,6 +3220,7 @@ var TESTABILITY_PROVIDERS = [{
   deps: [NgZone, TestabilityRegistry, TESTABILITY_GETTER]
 }, {
   provide: Testability,
+  // Also provide as `Testability` for backwards-compatibility.
   useClass: Testability,
   deps: [NgZone, TestabilityRegistry, TESTABILITY_GETTER]
 }];
@@ -3249,9 +3309,6 @@ var BrowserModule = _BrowserModule;
     }]
   }], null);
 })();
-function createMeta() {
-  return new Meta(ɵɵinject(DOCUMENT));
-}
 var _Meta = class _Meta {
   constructor(_doc) {
     this._doc = _doc;
@@ -3382,15 +3439,7 @@ _Meta.ɵfac = function Meta_Factory(t) {
 };
 _Meta.ɵprov = ɵɵdefineInjectable({
   token: _Meta,
-  factory: function Meta_Factory(t) {
-    let r = null;
-    if (t) {
-      r = new t();
-    } else {
-      r = createMeta();
-    }
-    return r;
-  },
+  factory: _Meta.ɵfac,
   providedIn: "root"
 });
 var Meta = _Meta;
@@ -3398,9 +3447,7 @@ var Meta = _Meta;
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Meta, [{
     type: Injectable,
     args: [{
-      providedIn: "root",
-      useFactory: createMeta,
-      deps: []
+      providedIn: "root"
     }]
   }], () => [{
     type: void 0,
@@ -3413,9 +3460,6 @@ var Meta = _Meta;
 var META_KEYS_MAP = {
   httpEquiv: "http-equiv"
 };
-function createTitle() {
-  return new Title(ɵɵinject(DOCUMENT));
-}
 var _Title = class _Title {
   constructor(_doc) {
     this._doc = _doc;
@@ -3439,15 +3483,7 @@ _Title.ɵfac = function Title_Factory(t) {
 };
 _Title.ɵprov = ɵɵdefineInjectable({
   token: _Title,
-  factory: function Title_Factory(t) {
-    let r = null;
-    if (t) {
-      r = new t();
-    } else {
-      r = createTitle();
-    }
-    return r;
-  },
+  factory: _Title.ɵfac,
   providedIn: "root"
 });
 var Title = _Title;
@@ -3455,9 +3491,7 @@ var Title = _Title;
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Title, [{
     type: Injectable,
     args: [{
-      providedIn: "root",
-      useFactory: createTitle,
-      deps: []
+      providedIn: "root"
     }]
   }], () => [{
     type: void 0,
@@ -3473,7 +3507,6 @@ function exportNgVar(name, value) {
     ng[name] = value;
   }
 }
-var win = typeof window !== "undefined" && window || {};
 var ChangeDetectionPerfRecord = class {
   constructor(msPerTick, numTicks) {
     this.msPerTick = msPerTick;
@@ -3504,29 +3537,25 @@ var AngularProfiler = class {
   timeChangeDetection(config) {
     const record = config && config["record"];
     const profileName = "Change Detection";
-    const isProfilerAvailable = win.console.profile != null;
-    if (record && isProfilerAvailable) {
-      win.console.profile(profileName);
+    if (record && "profile" in console && typeof console.profile === "function") {
+      console.profile(profileName);
     }
-    const start = performanceNow();
+    const start = performance.now();
     let numTicks = 0;
-    while (numTicks < 5 || performanceNow() - start < 500) {
+    while (numTicks < 5 || performance.now() - start < 500) {
       this.appRef.tick();
       numTicks++;
     }
-    const end = performanceNow();
-    if (record && isProfilerAvailable) {
-      win.console.profileEnd(profileName);
+    const end = performance.now();
+    if (record && "profileEnd" in console && typeof console.profileEnd === "function") {
+      console.profileEnd(profileName);
     }
     const msPerTick = (end - start) / numTicks;
-    win.console.log(`ran ${numTicks} change detection cycles`);
-    win.console.log(`${msPerTick.toFixed(2)} ms per check`);
+    console.log(`ran ${numTicks} change detection cycles`);
+    console.log(`${msPerTick.toFixed(2)} ms per check`);
     return new ChangeDetectionPerfRecord(msPerTick, numTicks);
   }
 };
-function performanceNow() {
-  return win.performance && win.performance.now ? win.performance.now() : (/* @__PURE__ */ new Date()).getTime();
-}
 var PROFILER_GLOBAL_NAME = "profiler";
 function enableDebugTools(ref) {
   exportNgVar(PROFILER_GLOBAL_NAME, new AngularProfiler(ref));
@@ -3829,9 +3858,6 @@ var DomSanitizer = _DomSanitizer;
     }]
   }], null, null);
 })();
-function domSanitizerImplFactory(injector) {
-  return new DomSanitizerImpl(injector.get(DOCUMENT));
-}
 var _DomSanitizerImpl = class _DomSanitizerImpl extends DomSanitizer {
   constructor(_doc) {
     super();
@@ -3913,15 +3939,7 @@ _DomSanitizerImpl.ɵfac = function DomSanitizerImpl_Factory(t) {
 };
 _DomSanitizerImpl.ɵprov = ɵɵdefineInjectable({
   token: _DomSanitizerImpl,
-  factory: function DomSanitizerImpl_Factory(t) {
-    let r = null;
-    if (t) {
-      r = new t();
-    } else {
-      r = domSanitizerImplFactory(ɵɵinject(Injector));
-    }
-    return r;
-  },
+  factory: _DomSanitizerImpl.ɵfac,
   providedIn: "root"
 });
 var DomSanitizerImpl = _DomSanitizerImpl;
@@ -3929,9 +3947,7 @@ var DomSanitizerImpl = _DomSanitizerImpl;
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(DomSanitizerImpl, [{
     type: Injectable,
     args: [{
-      providedIn: "root",
-      useFactory: domSanitizerImplFactory,
-      deps: [Injector]
+      providedIn: "root"
     }]
   }], () => [{
     type: void 0,
@@ -3941,6 +3957,11 @@ var DomSanitizerImpl = _DomSanitizerImpl;
     }]
   }], null);
 })();
+var HydrationFeatureKind;
+(function(HydrationFeatureKind2) {
+  HydrationFeatureKind2[HydrationFeatureKind2["NoHttpTransferCache"] = 0] = "NoHttpTransferCache";
+  HydrationFeatureKind2[HydrationFeatureKind2["HttpTransferCacheOptions"] = 1] = "HttpTransferCacheOptions";
+})(HydrationFeatureKind || (HydrationFeatureKind = {}));
 function hydrationFeature(ɵkind, ɵproviders = [], ɵoptions = {}) {
   return {
     ɵkind,
@@ -3948,13 +3969,10 @@ function hydrationFeature(ɵkind, ɵproviders = [], ɵoptions = {}) {
   };
 }
 function withNoHttpTransferCache() {
-  return hydrationFeature(
-    0
-    /* HydrationFeatureKind.NoHttpTransferCache */
-  );
+  return hydrationFeature(HydrationFeatureKind.NoHttpTransferCache);
 }
 function withHttpTransferCacheOptions(options) {
-  return hydrationFeature(1, withHttpTransferCache(options));
+  return hydrationFeature(HydrationFeatureKind.HttpTransferCacheOptions, withHttpTransferCache(options));
 }
 function provideZoneJsCompatibilityDetector() {
   return [{
@@ -3973,10 +3991,7 @@ function provideZoneJsCompatibilityDetector() {
 function provideClientHydration(...features) {
   const providers = [];
   const featuresKind = /* @__PURE__ */ new Set();
-  const hasHttpTransferCacheOptions = featuresKind.has(
-    1
-    /* HydrationFeatureKind.HttpTransferCacheOptions */
-  );
+  const hasHttpTransferCacheOptions = featuresKind.has(HydrationFeatureKind.HttpTransferCacheOptions);
   for (const {
     ɵproviders,
     ɵkind
@@ -3986,22 +4001,17 @@ function provideClientHydration(...features) {
       providers.push(ɵproviders);
     }
   }
-  if (typeof ngDevMode !== "undefined" && ngDevMode && featuresKind.has(
-    0
-    /* HydrationFeatureKind.NoHttpTransferCache */
-  ) && hasHttpTransferCacheOptions) {
+  if (typeof ngDevMode !== "undefined" && ngDevMode && featuresKind.has(HydrationFeatureKind.NoHttpTransferCache) && hasHttpTransferCacheOptions) {
     throw new Error("Configuration error: found both withHttpTransferCacheOptions() and withNoHttpTransferCache() in the same call to provideClientHydration(), which is a contradiction.");
   }
-  return makeEnvironmentProviders([typeof ngDevMode !== "undefined" && ngDevMode ? provideZoneJsCompatibilityDetector() : [], withDomHydration(), featuresKind.has(
-    0
-    /* HydrationFeatureKind.NoHttpTransferCache */
-  ) || hasHttpTransferCacheOptions ? [] : withHttpTransferCache({}), providers]);
+  return makeEnvironmentProviders([typeof ngDevMode !== "undefined" && ngDevMode ? provideZoneJsCompatibilityDetector() : [], withDomHydration(), featuresKind.has(HydrationFeatureKind.NoHttpTransferCache) || hasHttpTransferCacheOptions ? [] : withHttpTransferCache({}), providers]);
 }
-var VERSION = new Version("17.0.8");
+var VERSION = new Version("17.2.1");
 var makeStateKey2 = makeStateKey;
 var TransferState2 = TransferState;
 
 export {
+  HttpClient,
   BrowserDomAdapter,
   BrowserGetTestability,
   EVENT_MANAGER_PLUGINS,
@@ -4031,6 +4041,7 @@ export {
   HammerModule,
   DomSanitizer,
   DomSanitizerImpl,
+  HydrationFeatureKind,
   withNoHttpTransferCache,
   withHttpTransferCacheOptions,
   provideClientHydration,
@@ -4042,16 +4053,16 @@ export {
 
 @angular/common/fesm2022/http.mjs:
   (**
-   * @license Angular v17.0.8
+   * @license Angular v17.2.1
    * (c) 2010-2022 Google LLC. https://angular.io/
    * License: MIT
    *)
 
 @angular/platform-browser/fesm2022/platform-browser.mjs:
   (**
-   * @license Angular v17.0.8
+   * @license Angular v17.2.1
    * (c) 2010-2022 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-XNLJHINR.js.map
+//# sourceMappingURL=chunk-SCR52NSQ.js.map

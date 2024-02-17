@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
+import { MatIconModule } from "@angular/material/icon";
 
 import { AppComponent } from "./app.component";
 import { ProductListComponent } from "./product-list/product-list.component";
@@ -13,6 +14,7 @@ import { FooterComponent } from "./footer/footer.component";
     BrowserModule,
     ReactiveFormsModule,
     RouterModule.forRoot([{ path: "", component: ProductListComponent }]),
+    MatIconModule,
   ],
   declarations: [
     AppComponent,
