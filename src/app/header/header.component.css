@@ -1,50 +1,31 @@
-.shopName {
-  width: 255px;
-  flex-grow: 1;
-  margin: 0px;
-  overflow: hidden;
-  font-size: 40px;
-  font-weight: 800;
-  text-transform: none;
-  text-align: left;
-  letter-spacing: 0px;
-  line-height: 52px;
-  white-space: pre-line;
-  opacity: 1;
-  visibility: visible;
-  font-family: Roboto;
-}
+/*  */
 
-.buttonsBlock {
-  display: flex;
-  gap: 10px;
-}
-
-.buttons {
+.header {
+  background-color: #d93a23;
+  width: 100%;
+  height: 80px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  outline: none;
-  cursor: inherit;
-  width: 250px;
-  height: 62px;
-  opacity: 1;
-  border-radius: 24px;
-  box-shadow: rgba(3, 3, 3, 0.1) 0px 2px 4px;
-  border: 0px;
-  font-weight: 600;
-  font-size: 18px;
-  letter-spacing: 0px;
-  line-height: 28px;
-  cursor: pointer;
+  justify-content: space-between;
+  padding: 25px;
 }
 
-.firstBtn {
-  background-color: rgb(255, 255, 255);
-  color: rgb(115, 115, 115);
-}
-
-.secondBtn {
-  background-color: rgb(216, 58, 34);
+.shopName {
+  font-size: 32px;
   color: #fff;
+}
+
+.searchBlock {
+  width: 500px;
+}
+
+.searchInput {
+  border-radius: 10px;
+  width: 100%;
+  margin: 0;
+}
+
+.headerIcons {
+  display: flex;
+  gap: 10px;
 }

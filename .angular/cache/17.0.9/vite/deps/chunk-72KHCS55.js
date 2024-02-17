@@ -6,8 +6,6 @@ import {
   ElementRef,
   EventEmitter,
   Host,
-  IMAGE_CONFIG,
-  IMAGE_CONFIG_DEFAULTS,
   Inject,
   Injectable,
   InjectionToken,
@@ -29,18 +27,17 @@ import {
   TemplateRef,
   Version,
   ViewContainerRef,
-  __spreadProps,
-  __spreadValues,
   booleanAttribute,
   createNgModule,
   findLocaleData,
   formatRuntimeError,
+  getLocaleCurrencyCode,
   getLocalePluralCase,
   inject,
   isPromise,
   isSubscribable,
   numberAttribute,
-  performanceMarkFeature,
+  registerLocaleData,
   setClassMetadata,
   stringify,
   untracked,
@@ -56,7 +53,11 @@ import {
   ɵɵinject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
-} from "./chunk-THWPMT2E.js";
+} from "./chunk-RD5CTG73.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-4WX7ZCK5.js";
 
 // node_modules/@angular/common/fesm2022/common.mjs
 var _DOM = null;
@@ -174,7 +175,9 @@ var BrowserPlatformLocation = _BrowserPlatformLocation;
       providedIn: "platform",
       useFactory: () => new BrowserPlatformLocation()
     }]
-  }], () => [], null);
+  }], function() {
+    return [];
+  }, null);
 })();
 function joinWithSlash(start, end) {
   if (start.length == 0) {
@@ -294,17 +297,19 @@ var PathLocationStrategy = _PathLocationStrategy;
     args: [{
       providedIn: "root"
     }]
-  }], () => [{
-    type: PlatformLocation
-  }, {
-    type: void 0,
-    decorators: [{
-      type: Optional
+  }], function() {
+    return [{
+      type: PlatformLocation
     }, {
-      type: Inject,
-      args: [APP_BASE_HREF]
-    }]
-  }], null);
+      type: void 0,
+      decorators: [{
+        type: Optional
+      }, {
+        type: Inject,
+        args: [APP_BASE_HREF]
+      }]
+    }];
+  }, null);
 })();
 var _HashLocationStrategy = class _HashLocationStrategy extends LocationStrategy {
   constructor(_platformLocation, _baseHref) {
@@ -376,17 +381,19 @@ var HashLocationStrategy = _HashLocationStrategy;
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(HashLocationStrategy, [{
     type: Injectable
-  }], () => [{
-    type: PlatformLocation
-  }, {
-    type: void 0,
-    decorators: [{
-      type: Optional
+  }], function() {
+    return [{
+      type: PlatformLocation
     }, {
-      type: Inject,
-      args: [APP_BASE_HREF]
-    }]
-  }], null);
+      type: void 0,
+      decorators: [{
+        type: Optional
+      }, {
+        type: Inject,
+        args: [APP_BASE_HREF]
+      }]
+    }];
+  }, null);
 })();
 var _Location = class _Location {
   constructor(locationStrategy) {
@@ -588,9 +595,11 @@ var Location = _Location;
       // See #23917
       useFactory: createLocation
     }]
-  }], () => [{
-    type: LocationStrategy
-  }], null);
+  }], function() {
+    return [{
+      type: LocationStrategy
+    }];
+  }, null);
 })();
 function createLocation() {
   return new Location(ɵɵinject(LocationStrategy));
@@ -846,6 +855,14 @@ function getLocaleEraNames(locale, width) {
   const erasData = data[LocaleDataIndex.Eras];
   return getLastDefinedValue(erasData, width);
 }
+function getLocaleFirstDayOfWeek(locale) {
+  const data = findLocaleData(locale);
+  return data[LocaleDataIndex.FirstDayOfWeek];
+}
+function getLocaleWeekEndRange(locale) {
+  const data = findLocaleData(locale);
+  return data[LocaleDataIndex.WeekendRange];
+}
 function getLocaleDateFormat(locale, width) {
   const data = findLocaleData(locale);
   return getLastDefinedValue(data[LocaleDataIndex.DateFormat], width);
@@ -874,6 +891,17 @@ function getLocaleNumberSymbol(locale, symbol) {
 function getLocaleNumberFormat(locale, type) {
   const data = findLocaleData(locale);
   return data[LocaleDataIndex.NumberFormats][type];
+}
+function getLocaleCurrencySymbol(locale) {
+  const data = findLocaleData(locale);
+  return data[LocaleDataIndex.CurrencySymbol] || null;
+}
+function getLocaleCurrencyName(locale) {
+  const data = findLocaleData(locale);
+  return data[LocaleDataIndex.CurrencyName] || null;
+}
+function getLocaleCurrencyCode2(locale) {
+  return getLocaleCurrencyCode(locale);
 }
 function getLocaleCurrencies(locale) {
   const data = findLocaleData(locale);
@@ -911,6 +939,10 @@ function getLocaleExtraDayPeriods(locale, formStyle, width) {
   ]];
   const dayPeriods = getLastDefinedValue(dayPeriodsData, formStyle) || [];
   return getLastDefinedValue(dayPeriods, width) || [];
+}
+function getLocaleDirection(locale) {
+  const data = findLocaleData(locale);
+  return data[LocaleDataIndex.Directionality];
 }
 function getLastDefinedValue(data, index) {
   for (let i = index; i > -1; i--) {
@@ -1862,14 +1894,19 @@ var NgLocaleLocalization = _NgLocaleLocalization;
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(NgLocaleLocalization, [{
     type: Injectable
-  }], () => [{
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [LOCALE_ID]
-    }]
-  }], null);
+  }], function() {
+    return [{
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [LOCALE_ID]
+      }]
+    }];
+  }, null);
 })();
+function registerLocaleData2(data, localeId, extraData) {
+  return registerLocaleData(data, localeId, extraData);
+}
 function parseCookieValue(cookieStr, name) {
   name = encodeURIComponent(name);
   for (const cookie of cookieStr.split(";")) {
@@ -2006,15 +2043,17 @@ var NgClass = _NgClass;
       selector: "[ngClass]",
       standalone: true
     }]
-  }], () => [{
-    type: IterableDiffers
+  }], function() {
+    return [{
+      type: IterableDiffers
+    }, {
+      type: KeyValueDiffers
+    }, {
+      type: ElementRef
+    }, {
+      type: Renderer2
+    }];
   }, {
-    type: KeyValueDiffers
-  }, {
-    type: ElementRef
-  }, {
-    type: Renderer2
-  }], {
     klass: [{
       type: Input,
       args: ["class"]
@@ -2115,9 +2154,11 @@ var NgComponentOutlet = _NgComponentOutlet;
       selector: "[ngComponentOutlet]",
       standalone: true
     }]
-  }], () => [{
-    type: ViewContainerRef
-  }], {
+  }], function() {
+    return [{
+      type: ViewContainerRef
+    }];
+  }, {
     ngComponentOutlet: [{
       type: Input
     }],
@@ -2301,13 +2342,15 @@ var NgForOf = _NgForOf;
       selector: "[ngFor][ngForOf]",
       standalone: true
     }]
-  }], () => [{
-    type: ViewContainerRef
+  }], function() {
+    return [{
+      type: ViewContainerRef
+    }, {
+      type: TemplateRef
+    }, {
+      type: IterableDiffers
+    }];
   }, {
-    type: TemplateRef
-  }, {
-    type: IterableDiffers
-  }], {
     ngForOf: [{
       type: Input
     }],
@@ -2410,11 +2453,13 @@ var NgIf = _NgIf;
       selector: "[ngIf]",
       standalone: true
     }]
-  }], () => [{
-    type: ViewContainerRef
+  }], function() {
+    return [{
+      type: ViewContainerRef
+    }, {
+      type: TemplateRef
+    }];
   }, {
-    type: TemplateRef
-  }], {
     ngIf: [{
       type: Input
     }],
@@ -2438,7 +2483,6 @@ function assertTemplate(property, templateRef) {
     throw new Error(`${property} must be a TemplateRef, but received '${stringify(templateRef)}'.`);
   }
 }
-var NG_SWITCH_USE_STRICT_EQUALS = true;
 var SwitchView = class {
   constructor(_viewContainerRef, _templateRef) {
     this._viewContainerRef = _viewContainerRef;
@@ -2485,10 +2529,7 @@ var _NgSwitch = class _NgSwitch {
   }
   /** @internal */
   _matchCase(value) {
-    const matched = NG_SWITCH_USE_STRICT_EQUALS ? value === this._ngSwitch : value == this._ngSwitch;
-    if ((typeof ngDevMode === "undefined" || ngDevMode) && matched !== (value == this._ngSwitch)) {
-      console.warn(formatRuntimeError(2001, `As of Angular v17 the NgSwitch directive uses strict equality comparison === instead of == to match different cases. Previously the case value "${stringifyValue(value)}" matched switch expression value "${stringifyValue(this._ngSwitch)}", but this is no longer the case with the stricter equality check. Your comparison results return different results using === vs. == and you should adjust your ngSwitch expression and / or values to conform with the strict equality requirements.`));
-    }
+    const matched = value == this._ngSwitch;
     this._lastCasesMatched = this._lastCasesMatched || matched;
     this._lastCaseCheckIndex++;
     if (this._lastCaseCheckIndex === this._caseCount) {
@@ -2568,18 +2609,20 @@ var NgSwitchCase = _NgSwitchCase;
       selector: "[ngSwitchCase]",
       standalone: true
     }]
-  }], () => [{
-    type: ViewContainerRef
-  }, {
-    type: TemplateRef
-  }, {
-    type: NgSwitch,
-    decorators: [{
-      type: Optional
+  }], function() {
+    return [{
+      type: ViewContainerRef
     }, {
-      type: Host
-    }]
-  }], {
+      type: TemplateRef
+    }, {
+      type: NgSwitch,
+      decorators: [{
+        type: Optional
+      }, {
+        type: Host
+      }]
+    }];
+  }, {
     ngSwitchCase: [{
       type: Input
     }]
@@ -2609,24 +2652,23 @@ var NgSwitchDefault = _NgSwitchDefault;
       selector: "[ngSwitchDefault]",
       standalone: true
     }]
-  }], () => [{
-    type: ViewContainerRef
-  }, {
-    type: TemplateRef
-  }, {
-    type: NgSwitch,
-    decorators: [{
-      type: Optional
+  }], function() {
+    return [{
+      type: ViewContainerRef
     }, {
-      type: Host
-    }]
-  }], null);
+      type: TemplateRef
+    }, {
+      type: NgSwitch,
+      decorators: [{
+        type: Optional
+      }, {
+        type: Host
+      }]
+    }];
+  }, null);
 })();
 function throwNgSwitchProviderNotFoundError(attrName, directiveName) {
   throw new RuntimeError(2e3, `An element with the "${attrName}" attribute (matching the "${directiveName}" directive) must be located inside an element with the "ngSwitch" attribute (matching "NgSwitch" directive)`);
-}
-function stringifyValue(value) {
-  return typeof value === "string" ? `'${value}'` : String(value);
 }
 var _NgPlural = class _NgPlural {
   constructor(_localization) {
@@ -2675,9 +2717,11 @@ var NgPlural = _NgPlural;
       selector: "[ngPlural]",
       standalone: true
     }]
-  }], () => [{
-    type: NgLocalization
-  }], {
+  }], function() {
+    return [{
+      type: NgLocalization
+    }];
+  }, {
     ngPlural: [{
       type: Input
     }]
@@ -2706,22 +2750,24 @@ var NgPluralCase = _NgPluralCase;
       selector: "[ngPluralCase]",
       standalone: true
     }]
-  }], () => [{
-    type: void 0,
-    decorators: [{
-      type: Attribute,
-      args: ["ngPluralCase"]
-    }]
-  }, {
-    type: TemplateRef
-  }, {
-    type: ViewContainerRef
-  }, {
-    type: NgPlural,
-    decorators: [{
-      type: Host
-    }]
-  }], null);
+  }], function() {
+    return [{
+      type: void 0,
+      decorators: [{
+        type: Attribute,
+        args: ["ngPluralCase"]
+      }]
+    }, {
+      type: TemplateRef
+    }, {
+      type: ViewContainerRef
+    }, {
+      type: NgPlural,
+      decorators: [{
+        type: Host
+      }]
+    }];
+  }, null);
 })();
 var _NgStyle = class _NgStyle {
   constructor(_ngEl, _differs, _renderer) {
@@ -2779,13 +2825,15 @@ var NgStyle = _NgStyle;
       selector: "[ngStyle]",
       standalone: true
     }]
-  }], () => [{
-    type: ElementRef
+  }], function() {
+    return [{
+      type: ElementRef
+    }, {
+      type: KeyValueDiffers
+    }, {
+      type: Renderer2
+    }];
   }, {
-    type: KeyValueDiffers
-  }, {
-    type: Renderer2
-  }], {
     ngStyle: [{
       type: Input,
       args: ["ngStyle"]
@@ -2800,50 +2848,28 @@ var _NgTemplateOutlet = class _NgTemplateOutlet {
     this.ngTemplateOutlet = null;
     this.ngTemplateOutletInjector = null;
   }
+  /** @nodoc */
   ngOnChanges(changes) {
-    if (this._shouldRecreateView(changes)) {
+    if (changes["ngTemplateOutlet"] || changes["ngTemplateOutletInjector"]) {
       const viewContainerRef = this._viewContainerRef;
       if (this._viewRef) {
         viewContainerRef.remove(viewContainerRef.indexOf(this._viewRef));
       }
-      if (!this.ngTemplateOutlet) {
+      if (this.ngTemplateOutlet) {
+        const {
+          ngTemplateOutlet: template,
+          ngTemplateOutletContext: context,
+          ngTemplateOutletInjector: injector
+        } = this;
+        this._viewRef = viewContainerRef.createEmbeddedView(template, context, injector ? {
+          injector
+        } : void 0);
+      } else {
         this._viewRef = null;
-        return;
       }
-      const viewContext = this._createContextForwardProxy();
-      this._viewRef = viewContainerRef.createEmbeddedView(this.ngTemplateOutlet, viewContext, {
-        injector: this.ngTemplateOutletInjector ?? void 0
-      });
+    } else if (this._viewRef && changes["ngTemplateOutletContext"] && this.ngTemplateOutletContext) {
+      this._viewRef.context = this.ngTemplateOutletContext;
     }
-  }
-  /**
-   * We need to re-create existing embedded view if either is true:
-   * - the outlet changed.
-   * - the injector changed.
-   */
-  _shouldRecreateView(changes) {
-    return !!changes["ngTemplateOutlet"] || !!changes["ngTemplateOutletInjector"];
-  }
-  /**
-   * For a given outlet instance, we create a proxy object that delegates
-   * to the user-specified context. This allows changing, or swapping out
-   * the context object completely without having to destroy/re-create the view.
-   */
-  _createContextForwardProxy() {
-    return new Proxy({}, {
-      set: (_target, prop, newValue) => {
-        if (!this.ngTemplateOutletContext) {
-          return false;
-        }
-        return Reflect.set(this.ngTemplateOutletContext, prop, newValue);
-      },
-      get: (_target, prop, receiver) => {
-        if (!this.ngTemplateOutletContext) {
-          return void 0;
-        }
-        return Reflect.get(this.ngTemplateOutletContext, prop, receiver);
-      }
-    });
   }
 };
 _NgTemplateOutlet.ɵfac = function NgTemplateOutlet_Factory(t) {
@@ -2868,9 +2894,11 @@ var NgTemplateOutlet = _NgTemplateOutlet;
       selector: "[ngTemplateOutlet]",
       standalone: true
     }]
-  }], () => [{
-    type: ViewContainerRef
-  }], {
+  }], function() {
+    return [{
+      type: ViewContainerRef
+    }];
+  }, {
     ngTemplateOutletContext: [{
       type: Input
     }],
@@ -2982,9 +3010,11 @@ var AsyncPipe = _AsyncPipe;
       pure: false,
       standalone: true
     }]
-  }], () => [{
-    type: ChangeDetectorRef
-  }], null);
+  }], function() {
+    return [{
+      type: ChangeDetectorRef
+    }];
+  }, null);
 })();
 var _LowerCasePipe = class _LowerCasePipe {
   transform(value) {
@@ -3113,29 +3143,31 @@ var DatePipe = _DatePipe;
       pure: true,
       standalone: true
     }]
-  }], () => [{
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [LOCALE_ID]
-    }]
-  }, {
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [DATE_PIPE_DEFAULT_TIMEZONE]
+  }], function() {
+    return [{
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [LOCALE_ID]
+      }]
     }, {
-      type: Optional
-    }]
-  }, {
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [DATE_PIPE_DEFAULT_OPTIONS]
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [DATE_PIPE_DEFAULT_TIMEZONE]
+      }, {
+        type: Optional
+      }]
     }, {
-      type: Optional
-    }]
-  }], null);
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [DATE_PIPE_DEFAULT_OPTIONS]
+      }, {
+        type: Optional
+      }]
+    }];
+  }, null);
 })();
 var _INTERPOLATION_REGEXP = /#/g;
 var _I18nPluralPipe = class _I18nPluralPipe {
@@ -3177,9 +3209,11 @@ var I18nPluralPipe = _I18nPluralPipe;
       pure: true,
       standalone: true
     }]
-  }], () => [{
-    type: NgLocalization
-  }], null);
+  }], function() {
+    return [{
+      type: NgLocalization
+    }];
+  }, null);
 })();
 var _I18nSelectPipe = class _I18nSelectPipe {
   /**
@@ -3302,9 +3336,11 @@ var KeyValuePipe = _KeyValuePipe;
       pure: false,
       standalone: true
     }]
-  }], () => [{
-    type: KeyValueDiffers
-  }], null);
+  }], function() {
+    return [{
+      type: KeyValueDiffers
+    }];
+  }, null);
 })();
 function defaultComparator(keyValueA, keyValueB) {
   const a = keyValueA.key;
@@ -3372,13 +3408,15 @@ var DecimalPipe = _DecimalPipe;
       name: "number",
       standalone: true
     }]
-  }], () => [{
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [LOCALE_ID]
-    }]
-  }], null);
+  }], function() {
+    return [{
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [LOCALE_ID]
+      }]
+    }];
+  }, null);
 })();
 var _PercentPipe = class _PercentPipe {
   constructor(_locale) {
@@ -3429,13 +3467,15 @@ var PercentPipe = _PercentPipe;
       name: "percent",
       standalone: true
     }]
-  }], () => [{
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [LOCALE_ID]
-    }]
-  }], null);
+  }], function() {
+    return [{
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [LOCALE_ID]
+      }]
+    }];
+  }, null);
 })();
 var _CurrencyPipe = class _CurrencyPipe {
   constructor(_locale, _defaultCurrencyCode = "USD") {
@@ -3518,19 +3558,21 @@ var CurrencyPipe = _CurrencyPipe;
       name: "currency",
       standalone: true
     }]
-  }], () => [{
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [LOCALE_ID]
-    }]
-  }, {
-    type: void 0,
-    decorators: [{
-      type: Inject,
-      args: [DEFAULT_CURRENCY_CODE]
-    }]
-  }], null);
+  }], function() {
+    return [{
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [LOCALE_ID]
+      }]
+    }, {
+      type: void 0,
+      decorators: [{
+        type: Inject,
+        args: [DEFAULT_CURRENCY_CODE]
+      }]
+    }];
+  }, null);
 })();
 function isValue(value) {
   return !(value == null || value === "" || value !== value);
@@ -3601,10 +3643,21 @@ var CommonModule = _CommonModule;
 })();
 var PLATFORM_BROWSER_ID = "browser";
 var PLATFORM_SERVER_ID = "server";
+var PLATFORM_WORKER_APP_ID = "browserWorkerApp";
+var PLATFORM_WORKER_UI_ID = "browserWorkerUi";
+function isPlatformBrowser(platformId) {
+  return platformId === PLATFORM_BROWSER_ID;
+}
 function isPlatformServer(platformId) {
   return platformId === PLATFORM_SERVER_ID;
 }
-var VERSION = new Version("17.0.8");
+function isPlatformWorkerApp(platformId) {
+  return platformId === PLATFORM_WORKER_APP_ID;
+}
+function isPlatformWorkerUi(platformId) {
+  return platformId === PLATFORM_WORKER_UI_ID;
+}
+var VERSION = new Version("16.2.12");
 var _ViewportScroller = class _ViewportScroller {
 };
 _ViewportScroller.ɵprov = ɵɵdefineInjectable({
@@ -3723,6 +3776,34 @@ function findAnchorFromDocument(document, target) {
   }
   return null;
 }
+var NullViewportScroller = class {
+  /**
+   * Empty implementation
+   */
+  setOffset(offset) {
+  }
+  /**
+   * Empty implementation
+   */
+  getScrollPosition() {
+    return [0, 0];
+  }
+  /**
+   * Empty implementation
+   */
+  scrollToPosition(position) {
+  }
+  /**
+   * Empty implementation
+   */
+  scrollToAnchor(anchor) {
+  }
+  /**
+   * Empty implementation
+   */
+  setHistoryScrollRestoration(scrollRestoration) {
+  }
+};
 var XhrFactory = class {
 };
 function getUrl(src, win) {
@@ -3887,7 +3968,7 @@ var _LCPImageObserver = class _LCPImageObserver {
         return;
       if (!img.priority && !img.alreadyWarnedPriority) {
         img.alreadyWarnedPriority = true;
-        logMissingPriorityError(imgSrc);
+        logMissingPriorityWarning(imgSrc);
       }
       if (img.modified && !img.alreadyWarnedModified) {
         img.alreadyWarnedModified = true;
@@ -3947,11 +4028,13 @@ var LCPImageObserver = _LCPImageObserver;
     args: [{
       providedIn: "root"
     }]
-  }], () => [], null);
+  }], function() {
+    return [];
+  }, null);
 })();
-function logMissingPriorityError(ngSrc) {
+function logMissingPriorityWarning(ngSrc) {
   const directiveDetails = imgDirectiveDetails(ngSrc);
-  console.error(formatRuntimeError(2955, `${directiveDetails} this image is the Largest Contentful Paint (LCP) element but was not marked "priority". This image should be marked "priority" in order to prioritize its loading. To fix this, add the "priority" attribute.`));
+  console.warn(formatRuntimeError(2955, `${directiveDetails} this image is the Largest Contentful Paint (LCP) element but was not marked "priority". This image should be marked "priority" in order to prioritize its loading. To fix this, add the "priority" attribute.`));
 }
 function logModifiedWarning(ngSrc) {
   const directiveDetails = imgDirectiveDetails(ngSrc);
@@ -4039,7 +4122,9 @@ var PreconnectLinkChecker = _PreconnectLinkChecker;
     args: [{
       providedIn: "root"
     }]
-  }], () => [], null);
+  }], function() {
+    return [];
+  }, null);
 })();
 function deepForEach(input, fn) {
   for (let value of input) {
@@ -4125,6 +4210,13 @@ var OVERSIZED_IMAGE_TOLERANCE = 1e3;
 var FIXED_SRCSET_WIDTH_LIMIT = 1920;
 var FIXED_SRCSET_HEIGHT_LIMIT = 1080;
 var BUILT_IN_LOADERS = [imgixLoaderInfo, imageKitLoaderInfo, cloudinaryLoaderInfo];
+var defaultConfig = {
+  breakpoints: [16, 32, 48, 64, 96, 128, 256, 384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840]
+};
+var IMAGE_CONFIG = new InjectionToken("ImageConfig", {
+  providedIn: "root",
+  factory: () => defaultConfig
+});
 var _NgOptimizedImage = class _NgOptimizedImage {
   constructor() {
     this.imageLoader = inject(IMAGE_LOADER);
@@ -4142,7 +4234,6 @@ var _NgOptimizedImage = class _NgOptimizedImage {
   }
   /** @nodoc */
   ngOnInit() {
-    performanceMarkFeature("NgOptimizedImage");
     if (ngDevMode) {
       const ngZone = this.injector.get(NgZone);
       assertNonEmptyInput(this, "ngSrc", this.ngSrc);
@@ -4430,7 +4521,7 @@ function processConfig(config) {
   if (config.breakpoints) {
     sortedBreakpoints.breakpoints = config.breakpoints.sort((a, b) => a - b);
   }
-  return Object.assign({}, IMAGE_CONFIG_DEFAULTS, config, sortedBreakpoints);
+  return Object.assign({}, defaultConfig, config, sortedBreakpoints);
 }
 function assertNoConflictingSrc(dir) {
   if (dir.src) {
@@ -4521,9 +4612,8 @@ function assertGreaterThanZero(dir, inputValue, inputName) {
   }
 }
 function assertNoImageDistortion(dir, img, renderer) {
-  const removeLoadListenerFn = renderer.listen(img, "load", () => {
-    removeLoadListenerFn();
-    removeErrorListenerFn();
+  const removeListenerFn = renderer.listen(img, "load", () => {
+    removeListenerFn();
     const computedStyle = window.getComputedStyle(img);
     let renderedWidth = parseFloat(computedStyle.getPropertyValue("width"));
     let renderedHeight = parseFloat(computedStyle.getPropertyValue("height"));
@@ -4570,10 +4660,6 @@ Note: Recommended intrinsic image size is calculated assuming a maximum DPR of $
       }
     }
   });
-  const removeErrorListenerFn = renderer.listen(img, "error", () => {
-    removeLoadListenerFn();
-    removeErrorListenerFn();
-  });
 }
 function assertNonEmptyWidthAndHeight(dir) {
   let missingAttributes = [];
@@ -4591,17 +4677,12 @@ function assertEmptyWidthAndHeight(dir) {
   }
 }
 function assertNonZeroRenderedHeight(dir, img, renderer) {
-  const removeLoadListenerFn = renderer.listen(img, "load", () => {
-    removeLoadListenerFn();
-    removeErrorListenerFn();
+  const removeListenerFn = renderer.listen(img, "load", () => {
+    removeListenerFn();
     const renderedHeight = img.clientHeight;
     if (dir.fill && renderedHeight === 0) {
       console.warn(formatRuntimeError(2952, `${imgDirectiveDetails(dir.ngSrc)} the height of the fill-mode image is zero. This is likely because the containing element does not have the CSS 'position' property set to one of the following: "relative", "fixed", or "absolute". To fix this problem, make sure the container element has the CSS 'position' property defined and the height of the element is not zero.`));
     }
-  });
-  const removeErrorListenerFn = renderer.listen(img, "error", () => {
-    removeLoadListenerFn();
-    removeErrorListenerFn();
   });
 }
 function assertValidLoadingInput(dir) {
@@ -4652,25 +4733,107 @@ export {
   setRootDomAdapter,
   DomAdapter,
   DOCUMENT,
+  PlatformLocation,
   LOCATION_INITIALIZED,
+  BrowserPlatformLocation,
   LocationStrategy,
+  APP_BASE_HREF,
   PathLocationStrategy,
   HashLocationStrategy,
   Location,
+  NumberFormatStyle,
+  Plural,
+  FormStyle,
+  TranslationWidth,
+  FormatWidth,
+  NumberSymbol,
+  WeekDay,
+  getLocaleId,
+  getLocaleDayPeriods,
+  getLocaleDayNames,
+  getLocaleMonthNames,
+  getLocaleEraNames,
+  getLocaleFirstDayOfWeek,
+  getLocaleWeekEndRange,
+  getLocaleDateFormat,
+  getLocaleTimeFormat,
+  getLocaleDateTimeFormat,
+  getLocaleNumberSymbol,
+  getLocaleNumberFormat,
+  getLocaleCurrencySymbol,
+  getLocaleCurrencyName,
+  getLocaleCurrencyCode2 as getLocaleCurrencyCode,
+  getLocalePluralCase2 as getLocalePluralCase,
+  getLocaleExtraDayPeriodRules,
+  getLocaleExtraDayPeriods,
+  getLocaleDirection,
+  getCurrencySymbol,
+  getNumberOfCurrencyDigits,
+  formatDate,
+  formatCurrency,
+  formatPercent,
+  formatNumber,
+  NgLocalization,
+  NgLocaleLocalization,
+  registerLocaleData2 as registerLocaleData,
   parseCookieValue,
+  NgClass,
+  NgComponentOutlet,
+  NgForOfContext,
+  NgForOf,
+  NgIf,
+  NgIfContext,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+  NgPlural,
+  NgPluralCase,
+  NgStyle,
+  NgTemplateOutlet,
+  AsyncPipe,
+  LowerCasePipe,
+  TitleCasePipe,
+  UpperCasePipe,
+  DATE_PIPE_DEFAULT_TIMEZONE,
+  DATE_PIPE_DEFAULT_OPTIONS,
+  DatePipe,
+  I18nPluralPipe,
+  I18nSelectPipe,
+  JsonPipe,
+  KeyValuePipe,
+  DecimalPipe,
+  PercentPipe,
+  CurrencyPipe,
+  SlicePipe,
   CommonModule,
   PLATFORM_BROWSER_ID,
+  PLATFORM_SERVER_ID,
+  PLATFORM_WORKER_APP_ID,
+  PLATFORM_WORKER_UI_ID,
+  isPlatformBrowser,
   isPlatformServer,
+  isPlatformWorkerApp,
+  isPlatformWorkerUi,
+  VERSION,
   ViewportScroller,
-  XhrFactory
+  NullViewportScroller,
+  XhrFactory,
+  IMAGE_LOADER,
+  provideCloudflareLoader,
+  provideCloudinaryLoader,
+  provideImageKitLoader,
+  provideImgixLoader,
+  PRECONNECT_CHECK_BLOCKLIST,
+  IMAGE_CONFIG,
+  NgOptimizedImage
 };
 /*! Bundled license information:
 
 @angular/common/fesm2022/common.mjs:
   (**
-   * @license Angular v17.0.8
+   * @license Angular v16.2.12
    * (c) 2010-2022 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-2Q5BBGNX.js.map
+//# sourceMappingURL=chunk-72KHCS55.js.map

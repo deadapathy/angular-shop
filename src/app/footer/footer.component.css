@@ -1,0 +1,40 @@
+/* footer.component.css */
+
+/* Общие стили для футера */
+footer {
+  height: 40vh;
+  background-color: #fff;
+  padding: 3.5rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Стили для ссылок внутри футера */
+footer a {
+  color: #fff; /* Цвет ссылок */
+  text-decoration: none; /* Убираем подчеркивание у ссылок */
+  margin: 0 10px; /* Внешний отступ между ссылками */
+}
+
+/* Стили для ссылок при наведении */
+footer a:hover {
+  text-decoration: underline; /* Добавляем подчеркивание при наведении */
+}
+
+.mainBlock {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.shopInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shopContact {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

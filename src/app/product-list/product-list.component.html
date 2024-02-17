@@ -1,6 +1,13 @@
 <h2>Products</h2>
 
-
+<div class="productList">
+  <div *ngFor="let product of products">
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <p>Цена: {{ product.price }}</p>
+    <button>Купить</button>
+  </div>
+</div>
 <!-- 
 Copyright Google LLC. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that

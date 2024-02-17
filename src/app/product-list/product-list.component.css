@@ -1,4 +1,9 @@
-
+.productList {
+  display: grid;
+  margin: 3rem 3.5rem;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
 
 /*
 Copyright Google LLC. All Rights Reserved.

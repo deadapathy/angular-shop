@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AppComponent } from "./app.component";
 import { ProductListComponent } from "./product-list/product-list.component";
 import { HeaderComponent } from "./header/header.component";
+import { FooterComponent } from "./footer/footer.component";
 
 @NgModule({
   imports: [
@@ -13,7 +14,12 @@ import { HeaderComponent } from "./header/header.component";
     ReactiveFormsModule,
     RouterModule.forRoot([{ path: "", component: ProductListComponent }]),
   ],
-  declarations: [AppComponent, HeaderComponent, ProductListComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    ProductListComponent,
+    FooterComponent,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
